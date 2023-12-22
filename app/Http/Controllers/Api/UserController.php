@@ -36,11 +36,19 @@ class UserController extends Controller
             'username' => 'required|max:30',
             'email' => 'required',
             'password' => 'required|min:8',
+            'nik' => 'reuired|min:21',
+            'nama_lengkap' => 'required|max:50',
+            'tanggal_lahir' => 'required',
+            'alamat' => 'required|max:255',
+            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+
+        $foto = $request->file('foto');
+        $foto->storeAs('public/profile', $foto->hashName());
 
         $user = User::create([
             'username' => $request->username,
@@ -48,7 +56,19 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return new UserResource(true, 'New User successfully added !', $user);
+        $user_profile = UserProfile::create([
+            'user_id' => $user->id,
+            'nik' => $request->nik,
+            'nama_lengkap' => $request->nama_lengkap,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'gender' => $request->gender,
+            'alamat' => $request->alamat,
+            'pekerjaan' => $request->pekerjaan,
+            'kawin' => $request->kawin,
+            'foto' => $foto->hashName(),
+        ]);
+
+        return new UserProfileResource(true, 'New User successfully added !', $user_profile);
     }
 
     /**
