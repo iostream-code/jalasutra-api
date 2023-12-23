@@ -36,11 +36,12 @@ class UserController extends Controller
             'username' => 'required|max:30',
             'email' => 'required',
             'password' => 'required|min:8',
-            'nik' => 'reuired|min:21',
+            'role' => 'required',
+            'nik' => 'required|min:16',
             'nama_lengkap' => 'required|max:50',
             'tanggal_lahir' => 'required',
             'alamat' => 'required|max:255',
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -54,6 +55,7 @@ class UserController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
 
         $user_profile = UserProfile::create([
@@ -97,6 +99,12 @@ class UserController extends Controller
             'username' => 'required|max:30',
             'email' => 'required',
             'password' => 'required|min:8',
+            'role' => 'required',
+            'nik' => 'required|min:16',
+            'nama_lengkap' => 'required|max:50',
+            'tanggal_lahir' => 'required',
+            'alamat' => 'required|max:255',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -107,9 +115,12 @@ class UserController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
 
-        return new UserResource(true, 'User update successfully !', $user);
+        $user_profile = UserProfile::with('user')->where('user_id', $user->id)->first();
+
+        return new UserResource(true, 'User update successfully !', $user_profile);
     }
 
     /**
@@ -120,6 +131,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $user_profile = UserProfile::with('user')->where('user_id', $user->id)->first();
+
+        $user_profile->delete();
         $user->delete();
 
         return new UserResource(true, 'User has successfully deleted !', null);
