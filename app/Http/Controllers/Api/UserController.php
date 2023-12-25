@@ -147,7 +147,7 @@ class UserController extends Controller
             Storage::delete('public/profile/' . basename($user_profile->foto));
 
             $user_profile->update([
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
                 'nik' => $request->nik,
                 'nama_lengkap' => $request->nama_lengkap,
                 'tanggal_lahir' => $request->tanggal_lahir,
@@ -164,7 +164,7 @@ class UserController extends Controller
             Storage::delete('public/profile/' . basename($user_profile->foto));
 
             $user_profile->update([
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
                 'nik' => $request->nik,
                 'nama_lengkap' => $request->nama_lengkap,
                 'tanggal_lahir' => $request->tanggal_lahir,
