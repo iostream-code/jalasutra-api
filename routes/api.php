@@ -21,4 +21,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/user', UserController::class);
-Route::apiResource('/user-profile', UserProfileController::class);
