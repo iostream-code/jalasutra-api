@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->enum('jenis', ['kelurahan', 'kecamatan', 'kota', 'provinsi', 'pusat', 'umum', 'email'])->default('umum');
-            $table->string('gambar');
+            $table->string('gambar')->nullable();
             $table->string('deskripsi');
             $table->string('informasi');
             $table->string('persyaratan');

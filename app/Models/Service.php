@@ -19,7 +19,7 @@ class Service extends Model
         'jenis',
         'gambar',
         'deskripsi',
-        'infromasi',
+        'informasi',
         'persyaratan',
         'kontak',
     ];

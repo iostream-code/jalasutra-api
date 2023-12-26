@@ -6,6 +6,7 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServiceResource;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ServiceController extends Controller
@@ -31,9 +32,9 @@ class ServiceController extends Controller
         $validator = Validator::make($request->all(), [
             'nama' => 'required|max:30',
             'jenis' => 'required',
-            'gambar' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'gambar' => 'image|mimes:png,jpg,jpeg,webp|max:2048',
             'deskripsi' => 'required|max:255',
-            'infromasi' => 'required',
+            'informasi' => 'required',
             'persyaratan' => 'required',
             'kontak' => 'required',
         ]);
@@ -43,12 +44,12 @@ class ServiceController extends Controller
         }
 
         $gambar = $request->file('gambar');
-        $gambar->storeAs('public/services', $gambar->hashName());
+        $gambar->storeAs('public/service', $gambar->hashName());
 
         $service = Service::create([
             'nama' => $request->nama,
             'jenis' => $request->jenis,
-            'gambar' => $request->gambar,
+            'gambar' => $gambar->hashname(),
             'deskripsi' => $request->deskripsi,
             'informasi' => $request->informasi,
             'persyaratan' => $request->persyaratan,
@@ -61,24 +62,66 @@ class ServiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Service $service)
     {
-        //
+        return new ServiceResource(true, 'Service Detail', $service);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Service $service)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|max:30',
+            'jenis' => 'required',
+            'gambar' => 'image|mimes:png,jpg,jpeg,webp|max:2048',
+            'deskripsi' => 'required|max:255',
+            'informasi' => 'required',
+            'persyaratan' => 'required',
+            'kontak' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        if ($request->hasFile('gambar')) {
+            $gambar = $request->file('gambar');
+            $gambar->storeAs('public/service', $gambar->hashName());
+
+            Storage::delete('public/service/' . basename($service->gambar));
+
+            $service->update([
+                'nama' => $request->nama,
+                'jenis' => $request->jenis,
+                'gambar' => $request->gambar,
+                'deskripsi' => $request->deskripsi,
+                'informasi' => $request->informasi,
+                'persyaratan' => $request->persyaratan,
+                'kontak' => $request->kontak,
+            ]);
+        } else {
+            $service->update([
+                'nama' => $request->nama,
+                'jenis' => $request->jenis,
+                'deskripsi' => $request->deskripsi,
+                'informasi' => $request->informasi,
+                'persyaratan' => $request->persyaratan,
+                'kontak' => $request->kontak,
+            ]);
+        }
+
+        return new ServiceResource(true, 'Update Service Successfully!', $service);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Service $service)
     {
-        //
+        $service->delete();
+
+        return new ServiceResource(true, 'Service has been deleted!', null);
     }
 }

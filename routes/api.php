@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\UserProfileController;
 
 /*
@@ -21,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/user', UserController::class);
+Route::apiResource('/service', ServiceController::class);

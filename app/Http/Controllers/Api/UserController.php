@@ -158,11 +158,6 @@ class UserController extends Controller
                 'foto' => $foto->hashName(),
             ]);
         } else {
-            $foto = $request->file('foto');
-            $foto->storeAs('public/profile', $foto->hashName());
-
-            Storage::delete('public/profile/' . basename($user_profile->foto));
-
             $user_profile->update([
                 'user_id' => $user->id,
                 'nik' => $request->nik,
