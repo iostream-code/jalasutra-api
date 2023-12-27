@@ -49,7 +49,7 @@ class ServiceController extends Controller
         $service = Service::create([
             'nama' => $request->nama,
             'jenis' => $request->jenis,
-            'gambar' => $gambar->hashname(),
+            'gambar' => $gambar->hashName(),
             'deskripsi' => $request->deskripsi,
             'informasi' => $request->informasi,
             'persyaratan' => $request->persyaratan,
@@ -95,7 +95,7 @@ class ServiceController extends Controller
             $service->update([
                 'nama' => $request->nama,
                 'jenis' => $request->jenis,
-                'gambar' => $request->gambar,
+                'gambar' => $gambar->hashName(),
                 'deskripsi' => $request->deskripsi,
                 'informasi' => $request->informasi,
                 'persyaratan' => $request->persyaratan,
