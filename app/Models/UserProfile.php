@@ -38,7 +38,7 @@ class UserProfile extends Model
     protected function foto(): Attribute
     {
         return Attribute::make(
-            get: fn ($foto) => asset('/storage/user/' . $foto),
+            get: fn ($foto) => asset('/storage/profile/' . $foto),
         );
     }
 
