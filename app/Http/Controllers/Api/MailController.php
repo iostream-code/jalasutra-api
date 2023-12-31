@@ -64,6 +64,8 @@ class MailController extends Controller
         $validator = Validator::make($request->all(), [
             'blanko' => 'required|file|mimes:pdf|max:10485760',
             'nama' => 'required|max:30',
+            'nomor' => 'max:20',
+            'tanda_tangan' => 'image|mimes:png|max:2048',
         ]);
 
         if ($validator->fails()) {
