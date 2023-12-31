@@ -36,4 +36,9 @@ class Service extends Model
             get: fn ($gambar) => asset('/storage/service/' . $gambar),
         );
     }
+
+    public function mail()
+    {
+        return $this->hasOne(Mail::class);
+    }
 }
