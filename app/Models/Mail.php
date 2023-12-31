@@ -12,11 +12,8 @@ class Mail extends Model
 
     protected $fillable = [
         'service_id',
-        'user_id',
+        'nama',
         'blanko',
-        'nomor',
-        'status',
-        'tanda_tangan',
     ];
 
     /**
@@ -31,8 +28,25 @@ class Mail extends Model
         );
     }
 
+    /**
+     * tanda tangan
+     *
+     * @return Attribute
+     */
+    protected function tandaTangan(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($tanda_tangan) => asset('/storage/mail/tanda_tangan/' . $tanda_tangan),
+        );
+    }
+
     public function service()
     {
         return $this->belongsTo(Service::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 }

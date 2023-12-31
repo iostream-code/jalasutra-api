@@ -15,13 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('service_id');
             $table->foreign('service_id')->references('id')->on('services')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('nama')->nullable();
             $table->string('blanko')->nullable();
-            $table->string('nomor')->nullable();
-            $table->string('keperluan')->nullable();
-            $table->string('tanda_tangan')->nullable();
-            $table->enum('status', ['diproses', 'ditolak', 'diterima'])->default('diproses');
             $table->timestamps();
         });
     }
