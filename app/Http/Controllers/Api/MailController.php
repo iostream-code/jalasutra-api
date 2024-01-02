@@ -107,7 +107,7 @@ class MailController extends Controller
      */
     public function recapMailAdmin(Mail $mail)
     {
-        $mails = UserMail::where('mail_id', $mail->id)->latest()->paginate(10);
+        $mails = UserMail::where('mail_id', $mail->id)->get();
 
         return new MailResource(true, 'Rekap Surat!', $mails);
     }
@@ -136,10 +136,13 @@ class MailController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
+        $mail_detail = UserMail::where('mail_id', $mail->id);
+
         $tanda_tangan = $request->file('tanda_tangan');
         $tanda_tangan->storeAs('public/mail/tanda_tangan', $tanda_tangan->hashName());
 
-        $mail_detail = UserMail::create([
+        $mail_detail->update([
+            // 'user_id' => Auth::user();
             'mail_id' => $mail->id,
             'nomor' => $request->nomor,
             'status' => $request->status,
