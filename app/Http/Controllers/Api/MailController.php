@@ -7,6 +7,7 @@ use App\Models\UserMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MailResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,9 +16,19 @@ class MailController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function indexMailAdmin()
     {
         $mails = Mail::latest()->paginate(10);
+
+        return new MailResource(true, 'Daftar Surat!', $mails);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function indexMailUser()
+    {
+        $mails = UserMail::where('user_id', Auth::id())->latest()->paginate(10);
 
         return new MailResource(true, 'Daftar Surat!', $mails);
     }
@@ -35,7 +46,7 @@ class MailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeMailAdmin(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'blanko' => 'file|mimes:pdf|max:10485760',
@@ -61,7 +72,7 @@ class MailController extends Controller
     /**
      * Store UserMail a newly created resource in storage.
      */
-    public function storeUserMail(Request $request, Mail $mail)
+    public function storeMailUuser(Request $request, Mail $mail)
     {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
@@ -86,9 +97,29 @@ class MailController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Mail $mail)
+    public function showMailAdmin(Mail $mail)
     {
         return new MailResource(true, 'Detail Surat!', $mail);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function recapMailAdmin(Mail $mail)
+    {
+        $mails = UserMail::where('mail_id', $mail->id)->latest()->paginate(10);
+
+        return new MailResource(true, 'Rekap Kategori Surat!', $mails);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function showMailUser(Mail $mail)
+    {
+        $mail_detail = UserMail::where('id', $mail->id)->first();
+
+        return new MailResource(true, 'Detail Surat!', $mail_detail);
     }
 
     /**
@@ -169,7 +200,9 @@ class MailController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $mail_detail = UserMail::with('mail', 'user')->where('mail_id', $mail->id)->first();
+        $mail_detail = UserMail::where('mail_id', $mail->id)
+            ->where('user_id', $request->user_id)
+            ->first();
 
         $mail_detail->update([
             'user_id' => $request->user_id,

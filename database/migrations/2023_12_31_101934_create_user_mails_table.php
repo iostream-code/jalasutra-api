@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('nomor')->nullable();
             $table->string('isi')->nullable();
             $table->string('tanda_tangan')->nullable();
-            $table->enum('status', ['kosong', 'diproses', 'ditolak', 'diterima'])->default('kosong');
+            $table->enum('status', ['menunggu', 'diproses', 'ditolak', 'diterima'])->default('menunggu');
             $table->timestamps();
         });
     }

@@ -26,10 +26,11 @@ Route::apiResource('/service', ServiceController::class);
 
 /* Admin Route */
 Route::prefix('admin')->group(function () {
-    Route::get('/mail', [MailController::class, 'index']);
-    Route::post('/mail', [MailController::class, 'store']);
+    Route::get('/mail', [MailController::class, 'indexMailAdmin']);
+    Route::post('/mail', [MailController::class, 'storeMailAdmin']);
     Route::get('/mail/submissions', [MailController::class, 'indexMailSubmission']);
-    Route::get('/mail/{mail}', [MailController::class, 'show']);
+    Route::get('/mail/{mail}', [MailController::class, 'showMailAdmin']);
+    Route::get('/mail/{mail}/recap', [MailController::class, 'recapMailAdmin']);
     Route::patch('/mail/{mail}', [MailController::class, 'updateMailAdmin']);
     Route::delete('/mail/{mail}', [MailController::class, 'destroy']);
     Route::patch('/mail/{mail}/approval', [MailController::class, 'approval']);
@@ -37,6 +38,8 @@ Route::prefix('admin')->group(function () {
 
 /* Warga Route */
 Route::prefix('warga')->group(function () {
-    Route::post('/mail/{mail}', [MailController::class, 'storeUserMail']);
+    Route::get('/mail', [MailController::class, 'indexMailUser']);
+    Route::post('/mail/{mail}', [MailController::class, 'storeMailUser']);
+    Route::get('/mail/{mail}', [MailController::class, 'showMailUser']);
     Route::patch('/mail/{mail}', [MailController::class, 'updateMailUser']);
 });
