@@ -229,9 +229,13 @@ class MailController extends Controller
     /**
      * Fungsi untuk mengahpus surat yang dibuat pada User Warga
      */
-    public function deleteMailUser(UserMail $mail)
+    public function deleteMailUser(Mail $mail)
     {
-        $mail->delete();
+        $submitted_mail = UserMail::where('user_id', Auth::id())
+            ->where('mail_id', $mail->id)
+            ->get();
+
+        $submitted_mail->delete();
 
         return new MailResource(true, 'Berhasil Dihapus!', null);
     }
