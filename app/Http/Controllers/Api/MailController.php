@@ -14,27 +14,27 @@ use Illuminate\Support\Facades\Validator;
 class MailController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Fungsi untuk menampilkan semua jenis surat berdasarkan layananannya pada User Admin
      */
     public function indexMailAdmin()
     {
         $mails = Mail::latest()->paginate(10);
 
-        return new MailResource(true, 'Daftar Surat!', $mails);
+        return new MailResource(true, 'Daftar Seluruh Surat!', $mails);
     }
 
     /**
-     * Display a listing of the resource.
+     * Fungsi untuk menampilkan semua surat yang dibuat berdasarkan pembuatnya pada User Warga
      */
     public function indexMailUser()
     {
         $mails = UserMail::where('user_id', Auth::id())->latest()->paginate(10);
 
-        return new MailResource(true, 'Daftar Surat!', $mails);
+        return new MailResource(true, 'Daftar Seluruh Surat!', $mails);
     }
 
     /**
-     * Display a listing of the resource.
+     * Fungsi untuk menampilkan semua rekap surat yang telah dibuat oleh User Warga pada User Admin
      */
     public function indexMailSubmission()
     {
@@ -44,7 +44,7 @@ class MailController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Fungsi untuk membuat jenis surat baru berdasarkan layanannya pada User Admin
      */
     public function storeMailAdmin(Request $request)
     {
@@ -70,9 +70,9 @@ class MailController extends Controller
     }
 
     /**
-     * Store UserMail a newly created resource in storage.
+     * Fungsi untuk membuat surat baru berdasarkan jenis suratnya pada User Warga
      */
-    public function storeMailUuser(Request $request, Mail $mail)
+    public function storeMailUser(Request $request, Mail $mail)
     {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
@@ -95,7 +95,7 @@ class MailController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Fungsi untuk menampilkan detail surat berdasarkan jenisnya pada user Admin
      */
     public function showMailAdmin(Mail $mail)
     {
@@ -103,17 +103,17 @@ class MailController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Fungsi untuk menampilkan rekap dari surat yang dibuat oleh User Warga berdasarkan jenisnya pada User Admin
      */
     public function recapMailAdmin(Mail $mail)
     {
         $mails = UserMail::where('mail_id', $mail->id)->latest()->paginate(10);
 
-        return new MailResource(true, 'Rekap Kategori Surat!', $mails);
+        return new MailResource(true, 'Rekap Surat!', $mails);
     }
 
     /**
-     * Display the specified resource.
+     * Fungsi untuk menampilkan detail surat yang dibuat pada User Warga
      */
     public function showMailUser(Mail $mail)
     {
@@ -123,7 +123,7 @@ class MailController extends Controller
     }
 
     /**
-     * Update UserMail the specified resource in storage.
+     * Fungsi untuk melakukan persetujuan detail surat yang disubmit oleh User Warga pada User Admin
      */
     public function approval(Request $request, Mail $mail)
     {
@@ -150,7 +150,7 @@ class MailController extends Controller
     }
 
     /**
-     * Update Mail the specified resource in storage.
+     * Fungsi untuk merubah detail jenis surat pada User Admin
      */
     public function updateMailAdmin(Request $request, Mail $mail)
     {
@@ -186,7 +186,7 @@ class MailController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Fungsi untuk merubah detail surat yang dibuat pada User Warga
      */
     public function updateMailUser(Request $request, Mail $mail)
     {
@@ -214,10 +214,22 @@ class MailController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Fungsi untuk mengahpus jenis surat pada User Admin
      */
-    public function destroy(Mail $mail)
+    public function deleteMailAdmin(Mail $mail)
     {
-        //
+        $mail->delete();
+
+        return new MailResource(true, 'Berhasil Dihapus!', null);
+    }
+
+    /**
+     * Fungsi untuk mengahpus surat yang dibuat pada User Warga
+     */
+    public function deleteMailUser(UserMail $mail)
+    {
+        $mail->delete();
+
+        return new MailResource(true, 'Berhasil Dihapus!', null);
     }
 }

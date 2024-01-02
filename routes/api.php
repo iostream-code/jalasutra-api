@@ -34,6 +34,7 @@ Route::prefix('admin')->group(function () {
     Route::patch('/mail/{mail}', [MailController::class, 'updateMailAdmin']);
     Route::delete('/mail/{mail}', [MailController::class, 'destroy']);
     Route::patch('/mail/{mail}/approval', [MailController::class, 'approval']);
+    Route::delete('/mail/{mail}', [MailController::class, 'deleteMailAdmin']);
 });
 
 /* Warga Route */
@@ -42,4 +43,5 @@ Route::prefix('warga')->group(function () {
     Route::post('/mail/{mail}', [MailController::class, 'storeMailUser']);
     Route::get('/mail/{mail}', [MailController::class, 'showMailUser']);
     Route::patch('/mail/{mail}', [MailController::class, 'updateMailUser']);
+    Route::delete('/mail/{mail}', [MailController::class, 'deleteMailUser']);
 });
