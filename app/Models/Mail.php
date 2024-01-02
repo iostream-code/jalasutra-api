@@ -12,8 +12,8 @@ class Mail extends Model
 
     protected $fillable = [
         'service_id',
-        'nama',
         'blanko',
+        'nama',
     ];
 
     /**

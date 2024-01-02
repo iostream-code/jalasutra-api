@@ -23,6 +23,16 @@ class MailController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function indexMailSubmission()
+    {
+        $mails = UserMail::latest()->paginate(10);
+
+        return new MailResource(true, 'Daftar Surat Masuk!', $mails);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -49,6 +59,31 @@ class MailController extends Controller
     }
 
     /**
+     * Store UserMail a newly created resource in storage.
+     */
+    public function storeUserMail(Request $request, Mail $mail)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'mail_id' => 'required',
+            'isi' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $mail_detail = UserMail::create([
+            // 'user_id' => Auth()->id,
+            'user_id' => $request->user_id,
+            'mail_id' => $mail->id,
+            'isi' => $request->isi,
+        ]);
+
+        return new MailResource(true, 'Berhasil Menyimpan Surat!', $mail_detail);
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(Mail $mail)
@@ -57,13 +92,11 @@ class MailController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update UserMail the specified resource in storage.
      */
-    public function updateForAdmin(Request $request, Mail $mail)
+    public function approval(Request $request, Mail $mail)
     {
         $validator = Validator::make($request->all(), [
-            'blanko' => 'required|file|mimes:pdf|max:10485760',
-            'nama' => 'required|max:30',
             'nomor' => 'max:20',
             'tanda_tangan' => 'image|mimes:png|max:2048',
         ]);
@@ -74,6 +107,30 @@ class MailController extends Controller
 
         $tanda_tangan = $request->file('tanda_tangan');
         $tanda_tangan->storeAs('public/mail/tanda_tangan', $tanda_tangan->hashName());
+
+        $mail_detail = UserMail::create([
+            'mail_id' => $mail->id,
+            'nomor' => $request->nomor,
+            'status' => $request->status,
+            'tanda_tangan' => $tanda_tangan->hashName(),
+        ]);
+
+        return new MailResource(true, 'Berhasil Menyimpan Perubahan Surat!', $mail_detail);
+    }
+
+    /**
+     * Update Mail the specified resource in storage.
+     */
+    public function updateMailAdmin(Request $request, Mail $mail)
+    {
+        $validator = Validator::make($request->all(), [
+            'blanko' => 'file|mimes:pdf|max:10485760',
+            'nama' => 'max:30',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
 
         if ($request->hasFile('blanko')) {
 
@@ -87,43 +144,25 @@ class MailController extends Controller
                 'nama' => $request->nama,
                 'blanko' => $blanko->hashName(),
             ]);
-
-            $mail_detail = UserMail::create([
-                'mail_id' => $mail->id,
-                'nomor' => $request->nomor,
-                'status' => $request->status,
-                'tanda_tangan' => $tanda_tangan->hashName(),
-            ]);
         } else {
             $mail->update([
                 'service_id' => $request->service_id,
                 'nama' => $request->nama,
-                'nomor' => $request->nomor,
-                'status' => $request->status,
-                'tanda_tangan' => $tanda_tangan->hashName(),
-            ]);
-
-            $mail_detail = UserMail::create([
-                'mail_id' => $mail->id,
-                'nomor' => $request->nomor,
-                'status' => $request->status,
-                'tanda_tangan' => $tanda_tangan->hashName(),
             ]);
         }
 
-        return new MailResource(true, 'Berhasil Menyimpan Perubahan Surat!', $mail_detail);
+        return new MailResource(true, 'Berhasil Menyimpan Perubahan Surat!', $mail);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function updateForUser(Request $request, Mail $mail)
+    public function updateMailUser(Request $request, Mail $mail)
     {
         $validator = Validator::make($request->all(), [
-            'blanko' => 'required|file|mimes:pdf|max:10485760',
-            'nama' => 'required|max:30',
-            'nomor' => 'max:30',
-            'tanda_tangan' => 'image|mimes:png|max:2048',
+            'user_id' => 'required',
+            'mail_id' => 'required',
+            'isi' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -134,6 +173,7 @@ class MailController extends Controller
 
         $mail_detail->update([
             'user_id' => $request->user_id,
+            'mail_id' => $mail->id,
             'isi' => $request->isi,
         ]);
 

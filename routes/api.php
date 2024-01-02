@@ -23,9 +23,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('/user', UserController::class);
 Route::apiResource('/service', ServiceController::class);
-Route::get('/mail', [MailController::class, 'index']);
-Route::post('/mail', [MailController::class, 'store']);
-Route::get('/mail/{mail}', [MailController::class, 'show']);
-Route::patch('/mail/a/{mail}', [MailController::class, 'updateForAdmin']);
-Route::patch('/mail/u/{mail}', [MailController::class, 'updateForUser']);
-Route::delete('/mail{mail}', [MailController::class, 'destroy']);
+
+/* Admin Route */
+Route::prefix('admin')->group(function () {
+    Route::get('/mail', [MailController::class, 'index']);
+    Route::post('/mail', [MailController::class, 'store']);
+    Route::get('/mail/submissions', [MailController::class, 'indexMailSubmission']);
+    Route::get('/mail/{mail}', [MailController::class, 'show']);
+    Route::patch('/mail/{mail}', [MailController::class, 'updateMailAdmin']);
+    Route::delete('/mail/{mail}', [MailController::class, 'destroy']);
+    Route::patch('/mail/{mail}/approval', [MailController::class, 'approval']);
+});
+
+/* Warga Route */
+Route::prefix('warga')->group(function () {
+    Route::post('/mail/{mail}', [MailController::class, 'storeUserMail']);
+    Route::patch('/mail/{mail}', [MailController::class, 'updateMailUser']);
+});

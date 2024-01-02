@@ -12,9 +12,9 @@ class UserMail extends Model
     protected $fillable = [
         'user_id',
         'mail_id',
-        'isi',
-        'nomor',
         'status',
+        'nomor',
+        'isi',
         'tanda_tangan',
     ];
 }
