@@ -17,31 +17,38 @@ use App\Http\Controllers\Api\MailController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+/* Authentication Route */
 
-Route::apiResource('/user', UserController::class);
-Route::apiResource('/service', ServiceController::class);
+Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
+Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
 
-/* Admin Route */
-Route::prefix('admin')->group(function () {
-    Route::get('/mail', [MailController::class, 'indexMailAdmin']);
-    Route::post('/mail', [MailController::class, 'storeMailAdmin']);
-    Route::get('/mail/submissions', [MailController::class, 'indexMailSubmission']);
-    Route::get('/mail/{mail}', [MailController::class, 'showMailAdmin']);
-    Route::get('/mail/{mail}/recap', [MailController::class, 'recapMailAdmin']);
-    Route::patch('/mail/{mail}', [MailController::class, 'updateMailAdmin']);
-    Route::delete('/mail/{mail}', [MailController::class, 'destroy']);
-    Route::patch('/mail/{mail}/approval', [MailController::class, 'approval']);
-    Route::delete('/mail/{mail}', [MailController::class, 'deleteMailAdmin']);
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-/* Warga Route */
-Route::prefix('warga')->group(function () {
-    Route::get('/mail', [MailController::class, 'indexMailUser']);
-    Route::post('/mail/{mail}', [MailController::class, 'storeMailUser']);
-    Route::get('/mail/{mail}', [MailController::class, 'showMailUser']);
-    Route::patch('/mail/{mail}', [MailController::class, 'updateMailUser']);
-    Route::delete('/mail/{mail}', [MailController::class, 'deleteMailUser']);
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('/user', UserController::class);
+    Route::apiResource('/service', ServiceController::class);
+
+    /* Admin Route */
+    Route::prefix('admin')->group(function () {
+        Route::get('/mail', [MailController::class, 'indexMailAdmin']);
+        Route::post('/mail', [MailController::class, 'storeMailAdmin']);
+        Route::get('/mail/submissions', [MailController::class, 'indexMailSubmission']);
+        Route::get('/mail/{mail}', [MailController::class, 'showMailAdmin']);
+        Route::get('/mail/{mail}/recap', [MailController::class, 'recapMailAdmin']);
+        Route::patch('/mail/{mail}', [MailController::class, 'updateMailAdmin']);
+        Route::delete('/mail/{mail}', [MailController::class, 'destroy']);
+        Route::patch('/mail/{mail}/approval', [MailController::class, 'approval']);
+        Route::delete('/mail/{mail}', [MailController::class, 'deleteMailAdmin']);
+    });
+
+    /* Warga Route */
+    Route::prefix('warga')->group(function () {
+        Route::get('/mail', [MailController::class, 'indexMailUser']);
+        Route::post('/mail/{mail}', [MailController::class, 'storeMailUser']);
+        Route::get('/mail/{mail}', [MailController::class, 'showMailUser']);
+        Route::patch('/mail/{mail}', [MailController::class, 'updateMailUser']);
+        Route::delete('/mail/{mail}', [MailController::class, 'deleteMailUser']);
+    });
 });
