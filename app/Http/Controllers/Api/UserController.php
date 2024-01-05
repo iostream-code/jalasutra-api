@@ -90,8 +90,9 @@ class UserController extends Controller
      * @param mixed $user
      * @return void
      */
-    public function show(User $user)
+    public function show($id)
     {
+        $user = User::findOrFail($id)->first();
         $user_profile = UserProfile::with('user')->where('user_id', $user->id)->first();
 
         return new UserProfileResource(true, 'User Detail', $user_profile);
@@ -104,7 +105,7 @@ class UserController extends Controller
      * @param mixed $request
      * @return void
      */
-    public function update(User $user, Request $request)
+    public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|max:30',
@@ -130,6 +131,8 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+
+        $user = User::findOrFail($id)->first();
 
         $user->update([
             'username' => $request->username,
@@ -179,8 +182,9 @@ class UserController extends Controller
      * @param mixed $user
      * @return void
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        $user = User::findOrFail($id)->first();
         $user_profile = UserProfile::with('user')->where('user_id', $user->id)->first();
 
         $user_profile->delete();
