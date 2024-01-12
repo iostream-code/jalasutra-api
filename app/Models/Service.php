@@ -16,8 +16,8 @@ class Service extends Model
      * @var array<string, enum>
      */
     protected $fillable = [
+        'type_id',
         'nama',
-        'jenis',
         'gambar',
         'deskripsi',
         'informasi',
@@ -40,5 +40,10 @@ class Service extends Model
     public function mail()
     {
         return $this->hasOne(Mail::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(ServiceType::class);
     }
 }

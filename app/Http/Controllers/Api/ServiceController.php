@@ -16,9 +16,9 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::latest()->paginate(10);
+        $data = Service::with('type')->latest()->paginate(10);
 
-        return new ServiceResource(true, 'Daftar Layanan', $services);
+        return new ServiceResource(true, 'Daftar Layanan', $data);
     }
 
     /**
@@ -30,8 +30,8 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'type_id' => 'required',
             'nama' => 'required|max:30',
-            'jenis' => 'required',
             'gambar' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
             'deskripsi' => 'required|max:255',
             'informasi' => 'required',
@@ -47,8 +47,8 @@ class ServiceController extends Controller
         $gambar->storeAs('public/service', $gambar->hashName());
 
         $service = Service::create([
+            'type_id' => $request->type_id,
             'nama' => $request->nama,
-            'jenis' => $request->jenis,
             'gambar' => $gambar->hashName(),
             'deskripsi' => $request->deskripsi,
             'informasi' => $request->informasi,
@@ -56,7 +56,9 @@ class ServiceController extends Controller
             'kontak' => $request->kontak,
         ]);
 
-        return new ServiceResource(true, 'New Service successfully added !', $service);
+        $data = Service::with('type')->where('id', $service->id)->get();
+
+        return new ServiceResource(true, 'New Service successfully added !', $data);
     }
 
     /**
@@ -64,7 +66,9 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        return new ServiceResource(true, 'Service Detail', $service);
+        $data = Service::with('type')->where('id', $service->id)->get();
+
+        return new ServiceResource(true, 'Service Detail', $data);
     }
 
     /**
@@ -73,9 +77,9 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         $validator = Validator::make($request->all(), [
+            'type_id' => 'required',
             'nama' => 'required|max:30',
             'gambar' => 'image|mimes:png,jpg,jpeg,webp|max:2048',
-            'jenis' => 'required',
             'deskripsi' => 'required|max:255',
             'informasi' => 'required',
             'persyaratan' => 'required',
@@ -93,8 +97,8 @@ class ServiceController extends Controller
             Storage::delete('public/service/' . basename($service->gambar));
 
             $service->update([
+                'type_id' => $request->type_id,
                 'nama' => $request->nama,
-                'jenis' => $request->jenis,
                 'gambar' => $gambar->hashName(),
                 'deskripsi' => $request->deskripsi,
                 'informasi' => $request->informasi,
@@ -103,8 +107,8 @@ class ServiceController extends Controller
             ]);
         } else {
             $service->update([
+                'type_id' => $request->type_id,
                 'nama' => $request->nama,
-                'jenis' => $request->jenis,
                 'deskripsi' => $request->deskripsi,
                 'informasi' => $request->informasi,
                 'persyaratan' => $request->persyaratan,
@@ -112,7 +116,9 @@ class ServiceController extends Controller
             ]);
         }
 
-        return new ServiceResource(true, 'Update Service Successfully!', $service);
+        $data = Service::with('type')->where('id', $service->id)->get();
+
+        return new ServiceResource(true, 'Update Service Successfully!', $data);
     }
 
     /**

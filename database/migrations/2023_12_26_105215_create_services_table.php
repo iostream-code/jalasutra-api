@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('type_id');
+            $table->foreign('type_id')->references('id')->on('service_types')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama');
-            $table->enum('jenis', ['kecamatan', 'kota', 'provinsi', 'pusat', 'umum', 'email'])->default('umum');
             $table->string('gambar')->nullable();
             $table->string('deskripsi');
             $table->string('informasi');
