@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('villages', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->enum('jenis', ['kecamatan', 'kota', 'provinsi', 'pusat', 'umum', 'email'])->default('umum');
-            $table->string('gambar')->nullable();
-            $table->string('deskripsi');
-            $table->string('informasi');
-            $table->string('persyaratan');
-            $table->string('kontak')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('villages');
     }
 };

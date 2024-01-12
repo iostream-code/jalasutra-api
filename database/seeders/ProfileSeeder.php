@@ -19,6 +19,7 @@ class ProfileSeeder extends Seeder
         $data = [
             [
                 'user_id' => 1,
+                'village_id' => 1,
                 'nik' => random_int(3570000000000000, 3579999999999999),
                 'nama_lengkap' => $faker->name($gender),
                 'tanggal_lahir' => $faker->date(),
@@ -29,6 +30,7 @@ class ProfileSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
+                'village_id' => 2,
                 'nik' => random_int(3570000000000000, 3579999999999999),
                 'nama_lengkap' => $faker->name($gender),
                 'tanggal_lahir' => $faker->date(),
@@ -39,6 +41,7 @@ class ProfileSeeder extends Seeder
             ],
             [
                 'user_id' => 3,
+                'village_id' => 3,
                 'nik' => random_int(3570000000000000, 3579999999999999),
                 'nama_lengkap' => $faker->name($gender),
                 'tanggal_lahir' => $faker->date(),
@@ -49,6 +52,7 @@ class ProfileSeeder extends Seeder
             ],
             [
                 'user_id' => 4,
+                'village_id' => 4,
                 'nik' => random_int(3570000000000000, 3579999999999999),
                 'nama_lengkap' => $faker->name($gender),
                 'tanggal_lahir' => $faker->date(),
@@ -59,6 +63,7 @@ class ProfileSeeder extends Seeder
             ],
             [
                 'user_id' => 5,
+                'village_id' => 5,
                 'nik' => random_int(3570000000000000, 3579999999999999),
                 'nama_lengkap' => $faker->name($gender),
                 'tanggal_lahir' => $faker->date(),
@@ -69,6 +74,7 @@ class ProfileSeeder extends Seeder
             ],
             [
                 'user_id' => 6,
+                'village_id' => 6,
                 'nik' => random_int(3570000000000000, 3579999999999999),
                 'nama_lengkap' => $faker->name($gender),
                 'tanggal_lahir' => $faker->date(),

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('village_id');
+            $table->foreign('village_id')->references('id')->on('villages')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nik');
             $table->string('nama_lengkap');
             $table->date('tanggal_lahir');
