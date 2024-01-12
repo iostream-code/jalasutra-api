@@ -26,7 +26,7 @@ class ProfileSeeder extends Seeder
                 'gender' => $faker->randomElement(['pria', 'wanita']),
                 'alamat' => $faker->address(),
                 'pekerjaan' => $faker->jobTitle(),
-                'kawin' => $faker->randomElement([0, 1]),
+                'status' => $faker->randomElement(['kawin', 'belum kawin']),
             ],
             [
                 'user_id' => 2,
@@ -37,7 +37,7 @@ class ProfileSeeder extends Seeder
                 'gender' => $faker->randomElement(['pria', 'wanita']),
                 'alamat' => $faker->address(),
                 'pekerjaan' => $faker->jobTitle(),
-                'kawin' => $faker->randomElement([0, 1]),
+                'status' => $faker->randomElement(['kawin', 'belum kawin']),
             ],
             [
                 'user_id' => 3,
@@ -48,7 +48,7 @@ class ProfileSeeder extends Seeder
                 'gender' => $faker->randomElement(['pria', 'wanita']),
                 'alamat' => $faker->address(),
                 'pekerjaan' => $faker->jobTitle(),
-                'kawin' => $faker->randomElement([0, 1]),
+                'status' => $faker->randomElement(['kawin', 'belum kawin']),
             ],
             [
                 'user_id' => 4,
@@ -59,7 +59,7 @@ class ProfileSeeder extends Seeder
                 'gender' => $faker->randomElement(['pria', 'wanita']),
                 'alamat' => $faker->address(),
                 'pekerjaan' => $faker->jobTitle(),
-                'kawin' => $faker->randomElement([0, 1]),
+                'status' => $faker->randomElement(['kawin', 'belum kawin']),
             ],
             [
                 'user_id' => 5,
@@ -70,7 +70,7 @@ class ProfileSeeder extends Seeder
                 'gender' => $faker->randomElement(['pria', 'wanita']),
                 'alamat' => $faker->address(),
                 'pekerjaan' => $faker->jobTitle(),
-                'kawin' => $faker->randomElement([0, 1]),
+                'status' => $faker->randomElement(['kawin', 'belum kawin']),
             ],
             [
                 'user_id' => 6,
@@ -81,7 +81,7 @@ class ProfileSeeder extends Seeder
                 'gender' => $faker->randomElement(['pria', 'wanita']),
                 'alamat' => $faker->address(),
                 'pekerjaan' => $faker->jobTitle(),
-                'kawin' => $faker->randomElement([0, 1]),
+                'status' => $faker->randomElement(['kawin', 'belum kawin']),
             ],
         ];
 

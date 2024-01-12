@@ -35,13 +35,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'role_id' => 'required',
             'username' => 'required|max:30',
             'email' => 'required',
             'password' => 'required|min:8',
-            'role' => 'required',
             'nik' => 'required|numeric|min:16',
             'nama_lengkap' => 'required|max:50',
             'tanggal_lahir' => 'required',
+            'village_id' => 'required',
             'alamat' => 'required|max:255',
             'foto' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ], [
@@ -66,7 +67,7 @@ class UserController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role_id' => $request->role_id,
         ]);
 
         $user_profile = UserProfile::create([
@@ -75,9 +76,10 @@ class UserController extends Controller
             'nama_lengkap' => $request->nama_lengkap,
             'tanggal_lahir' => $request->tanggal_lahir,
             'gender' => $request->gender,
+            'village_id' => $request->village_id,
             'alamat' => $request->alamat,
             'pekerjaan' => $request->pekerjaan,
-            'kawin' => $request->kawin,
+            'status' => $request->status,
             'foto' => $foto->hashName(),
         ]);
 
@@ -105,13 +107,13 @@ class UserController extends Controller
      * @param mixed $request
      * @return void
      */
-    public function update($id, Request $request)
+    public function update(User $user, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|max:30',
             'email' => 'required',
             'password' => 'required|min:8',
-            'role' => 'required',
+            'role_id' => 'required',
             'nik' => 'required|numeric|min:16',
             'nama_lengkap' => 'required|max:50',
             'tanggal_lahir' => 'required',
@@ -132,13 +134,13 @@ class UserController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $user = User::findOrFail($id)->first();
+        // $user = User::findOrFail($id)->first();
 
         $user->update([
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role_id' => $request->role_id,
         ]);
 
         $user_profile = UserProfile::with('user')->where('user_id', $user->id)->first();
@@ -151,25 +153,27 @@ class UserController extends Controller
 
             $user_profile->update([
                 'user_id' => $user->id,
+                'village_id' => $request->village_id,
                 'nik' => $request->nik,
                 'nama_lengkap' => $request->nama_lengkap,
                 'tanggal_lahir' => $request->tanggal_lahir,
                 'gender' => $request->gender,
                 'alamat' => $request->alamat,
                 'pekerjaan' => $request->pekerjaan,
-                'kawin' => $request->kawin,
+                'status' => $request->status,
                 'foto' => $foto->hashName(),
             ]);
         } else {
             $user_profile->update([
                 'user_id' => $user->id,
+                'village_id' => $request->village_id,
                 'nik' => $request->nik,
                 'nama_lengkap' => $request->nama_lengkap,
                 'tanggal_lahir' => $request->tanggal_lahir,
                 'gender' => $request->gender,
                 'alamat' => $request->alamat,
                 'pekerjaan' => $request->pekerjaan,
-                'kawin' => $request->kawin,
+                'status' => $request->status,
             ]);
         }
 
@@ -182,9 +186,9 @@ class UserController extends Controller
      * @param mixed $user
      * @return void
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id)->with('role')->first();
+        // $user = User::findOrFail($id)->with('role')->first();
         $user_profile = UserProfile::with('user')->where('user_id', $user->id)->first();
 
         $user_profile->delete();

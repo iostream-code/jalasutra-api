@@ -24,7 +24,7 @@ return new class extends Migration
             $table->enum('gender', ['pria', 'wanita'])->nullable();
             $table->text('alamat')->nullable();
             $table->string('pekerjaan')->nullable();
-            $table->boolean('kawin')->default(false);
+            $table->enum('status', ['kawin', 'belum kawin']);
             $table->string('foto')->nullable();
             $table->timestamps();
         });
