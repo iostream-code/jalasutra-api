@@ -16,9 +16,9 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $data = Service::with('type')->latest()->paginate(10);
+        $services = Service::with('type')->latest()->paginate(10);
 
-        return new ServiceResource(true, 'Daftar Layanan', $data);
+        return new ServiceResource(true, 'Daftar Layanan', $services);
     }
 
     /**
@@ -66,9 +66,9 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        $data = Service::with('type')->where('id', $service->id)->get();
+        // $data = Service::with('type')->where('id', $service->id)->get();
 
-        return new ServiceResource(true, 'Service Detail', $data);
+        return new ServiceResource(true, 'Service Detail', $service);
     }
 
     /**
@@ -116,9 +116,9 @@ class ServiceController extends Controller
             ]);
         }
 
-        $data = Service::with('type')->where('id', $service->id)->get();
+        // $data = Service::with('type')->where('id', $service->id)->get();
 
-        return new ServiceResource(true, 'Update Service Successfully!', $data);
+        return new ServiceResource(true, 'Update Service Successfully!', $service);
     }
 
     /**
