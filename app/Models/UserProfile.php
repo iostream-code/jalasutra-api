@@ -51,4 +51,9 @@ class UserProfile extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function village()
+    {
+        return $this->belongsTo(Village::class);
+    }
 }

@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::with('role')->latest()->paginate(10);
 
         return new UserResource(true, 'Daftar Pengguna', $users);
     }
@@ -90,10 +90,10 @@ class UserController extends Controller
      * @param mixed $user
      * @return void
      */
-    public function show($id)
+    public function show(User $user) /* Try to solve this bug */
     {
-        $user = User::findOrFail($id)->first();
-        $user_profile = UserProfile::with('user')->where('user_id', $user->id)->first();
+        // $user = User::findOrFail($id)->first();
+        $user_profile = UserProfile::with('user')->where('user_id', $user->id)->with('village')->first();
 
         return new UserProfileResource(true, 'User Detail', $user_profile);
     }
@@ -184,7 +184,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id)->first();
+        $user = User::findOrFail($id)->with('role')->first();
         $user_profile = UserProfile::with('user')->where('user_id', $user->id)->first();
 
         $user_profile->delete();

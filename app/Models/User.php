@@ -80,4 +80,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(UserMail::class);
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }
