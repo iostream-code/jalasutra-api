@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\MailController;
+use App\Http\Controllers\Api\ServiceTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,7 @@ Route::middleware('auth:api')->group(function () {
 
     /* Admin Route */
     Route::prefix('admin')->group(function () {
+        Route::apiResource('/service-type', ServiceTypeController::class);
         Route::get('/mail', [MailController::class, 'indexMailAdmin']);
         Route::post('/mail', [MailController::class, 'storeMailAdmin']);
         Route::get('/mail/submissions', [MailController::class, 'indexMailSubmission']);
