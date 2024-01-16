@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('type_id')->references('id')->on('service_types')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama');
             $table->string('gambar')->nullable();
-            $table->string('deskripsi');
+            $table->text('deskripsi');
             $table->string('informasi');
             $table->string('persyaratan');
             $table->string('kontak')->nullable();
