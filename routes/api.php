@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\ServiceTypeController;
 
 Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
 Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
+Route::get('/service', [ServiceController::class, 'index']);
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
@@ -29,7 +30,14 @@ Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('
 
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('/user', UserController::class);
-    Route::apiResource('/service', ServiceController::class);
+    // Route::apiResource('/service', ServiceController::class);
+
+    Route::prefix('service')->group(function () {
+        Route::post('/', [ServiceController::class, 'store']);
+        Route::get('/{service}', [ServiceController::class, 'show']);
+        Route::patch('/{service}', [ServiceController::class, 'update']);
+        Route::delete('/{service}', [ServiceController::class, 'destroy']);
+    });
 
     /* Admin Route */
     Route::prefix('admin')->group(function () {
