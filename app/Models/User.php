@@ -23,7 +23,7 @@ class User extends Authenticatable implements JWTSubject
         'username',
         'email',
         'password',
-        'role_id',
+        'role',
     ];
 
     /**
@@ -33,7 +33,6 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -42,7 +41,6 @@ class User extends Authenticatable implements JWTSubject
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 
@@ -79,10 +77,5 @@ class User extends Authenticatable implements JWTSubject
     public function mails()
     {
         return $this->hasMany(UserMail::class);
-    }
-
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
     }
 }

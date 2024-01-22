@@ -35,10 +35,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'role_id' => 'required',
             'username' => 'required|max:30',
             'email' => 'required',
             'password' => 'required|min:8',
+            'role' => 'required',
             'nik' => 'required|numeric|min:16',
             'nama_lengkap' => 'required|max:50',
             'tanggal_lahir' => 'required',
@@ -67,7 +67,7 @@ class UserController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => $request->role_id,
+            'role' => $request->role,
         ]);
 
         $user_profile = UserProfile::create([
@@ -110,10 +110,10 @@ class UserController extends Controller
     public function update(User $user, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'role_id' => 'required',
             'username' => 'required|max:30',
             'email' => 'required',
             'password' => 'required|min:8',
+            'role' => 'required',
             'nik' => 'required|numeric|min:16',
             'nama_lengkap' => 'required|max:50',
             'tanggal_lahir' => 'required',
@@ -137,10 +137,10 @@ class UserController extends Controller
         // $user = User::findOrFail($id)->first();
 
         $user->update([
-            'role_id' => $request->role_id,
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
 
         $user_profile = UserProfile::with('user')->where('user_id', $user->id)->first();
