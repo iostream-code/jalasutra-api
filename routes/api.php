@@ -40,7 +40,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     /* Admin Route */
-    Route::prefix('admin')->group(function () {
+    Route::prefix('admin')->middleware(['role:KECAMATAN|DESA'])->group(function () {
         Route::apiResource('/service-type', ServiceTypeController::class);
         Route::get('/mail', [MailController::class, 'indexMailAdmin']);
         Route::post('/mail', [MailController::class, 'storeMailAdmin']);
@@ -54,7 +54,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     /* Warga Route */
-    Route::prefix('warga')->group(function () {
+    Route::prefix('warga')->middleware(['role:WARGA'])->group(function () {
         Route::get('/mail', [MailController::class, 'indexMailUser']);
         Route::post('/mail/{mail}', [MailController::class, 'storeMailUser']);
         Route::get('/mail/{mail}', [MailController::class, 'showMailUser']);
