@@ -18,30 +18,35 @@ use App\Http\Controllers\Api\ServiceTypeController;
 |
 */
 
-/* Authentication Route */
-
+/* Unauthenticated Route */
 Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
-Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
-Route::get('/service', [ServiceController::class, 'index']);
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::get('/services', [ServiceController::class, 'index']);
 
 Route::middleware('auth:api')->group(function () {
-    Route::apiResource('/user', UserController::class);
-    // Route::apiResource('/service', ServiceController::class);
+    /* Authenticated Route */
+    Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
 
-    Route::prefix('service')->group(function () {
-        Route::post('/', [ServiceController::class, 'store']);
-        Route::get('/{service}', [ServiceController::class, 'show']);
-        Route::patch('/{service}', [ServiceController::class, 'update']);
-        Route::delete('/{service}', [ServiceController::class, 'destroy']);
-    });
+    /* Global User Route */
+    Route::post('/user', [UserController::class, 'store']);
+    Route::get('/user/{user}', [UserController::class, 'show']);
+    Route::patch('/user/{user}', [UserController::class, 'update']);
+
+    /* Global Service Route */
+    Route::get('/{service}', [ServiceController::class, 'show']);
 
     /* Admin Route */
-    Route::prefix('admin')->middleware(['role:KECAMATAN|DESA'])->group(function () {
-        Route::apiResource('/service-type', ServiceTypeController::class);
+    Route::prefix('admin')->middleware('role:KECAMATAN,DESA')->group(function () {
+        /* User Route */
+        Route::get('/users', [UserController::class, 'index']);
+        Route::delete('/user/{user}', [UserController::class, 'destroy']);
+
+        /* Service Route */
+        Route::post('/service', [ServiceController::class, 'store']);
+        Route::patch('/service/{service}', [ServiceController::class, 'update']);
+        Route::delete('/service/{service}', [ServiceController::class, 'destroy']);
+        Route::apiResource('/service/service-type', ServiceTypeController::class);
+
+        /* Mail Route */
         Route::get('/mail', [MailController::class, 'indexMailAdmin']);
         Route::post('/mail', [MailController::class, 'storeMailAdmin']);
         Route::get('/mail/submissions', [MailController::class, 'indexMailSubmission']);
@@ -55,6 +60,7 @@ Route::middleware('auth:api')->group(function () {
 
     /* Warga Route */
     Route::prefix('warga')->middleware(['role:WARGA'])->group(function () {
+        /* Mail Route */
         Route::get('/mail', [MailController::class, 'indexMailUser']);
         Route::post('/mail/{mail}', [MailController::class, 'storeMailUser']);
         Route::get('/mail/{mail}', [MailController::class, 'showMailUser']);
