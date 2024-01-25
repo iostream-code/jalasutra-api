@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::with('profile')->latest()->paginate(10);
 
         return new UserResource(true, 'Daftar Pengguna', $users);
     }
